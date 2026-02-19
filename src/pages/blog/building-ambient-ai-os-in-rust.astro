@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Building an Ambient AI OS in Rust — Gyre"
+  description="Why we built Gyre, how it works under the hood, and what 'ambient' actually means."
+  ogTitle="Building an Ambient AI OS in Rust"
+  ogDescription="Why we built Gyre, how it works under the hood, and what 'ambient' actually means."
+>
+  <!-- Nav -->
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #1e1e35;padding:0 2rem;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;">
+      <a href="/" style="font-family:Georgia,serif;font-size:1.25rem;font-weight:bold;color:#e8e8f0;letter-spacing:-0.02em;">gyre</a>
+      <div style="display:flex;gap:2rem;align-items:center;">
+        <a href="/docs" style="color:#9898b8;font-size:0.875rem;">Docs</a>
+        <a href="/#pricing" style="color:#9898b8;font-size:0.875rem;">Pricing</a>
+        <a href="/install" style="background:#6366f1;color:white;padding:0.4rem 1rem;border-radius:6px;font-size:0.875rem;font-weight:500;">Install</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <main style="max-width:720px;margin:0 auto;padding:5rem 2rem 8rem;">
+    
+    <!-- Back link -->
+    <a href="/" style="color:#5c5c80;font-size:0.875rem;display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:3rem;">← Back to getgyre.com</a>
+
+    <!-- Header -->
+    <header style="margin-bottom:3.5rem;">
+      <div style="font-size:0.8rem;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Blog · February 2026</div>
+      <h1 style="font-family:Georgia,serif;font-size:clamp(2rem,4vw,3rem);line-height:1.15;margin-bottom:1.5rem;letter-spacing:-0.02em;">
+        Building an Ambient AI OS in Rust
+      </h1>
+      <p style="font-size:1.15rem;color:#9898b8;line-height:1.7;font-style:italic;">
+        Why we built Gyre, how it works under the hood, and what "ambient" actually means.
+      </p>
+    </header>
+
+    <!-- Article body -->
+    <article style="font-size:1.05rem;line-height:1.85;color:#b8b8d0;">
+      
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">The Moment We're In</h2>
+      
+      <p style="margin-bottom:1.5rem;">Something shifted in the last year. AI stopped being a chatbot you visit and started becoming something you run. The difference is subtle but it matters enormously.</p>
+      
+      <p style="margin-bottom:1.5rem;">When you <em>visit</em> an AI, you're a user of someone else's system. You bring a problem, you get an answer, you leave. The AI has no continuity with you. It doesn't know what you cared about last Tuesday. It doesn't notice when something in your project changed. It waits.</p>
+      
+      <p style="margin-bottom:1.5rem;">When you <em>run</em> an AI, the relationship inverts. The agent has context. It accumulates. It develops opinions about your codebase, your writing style, your working patterns. Over weeks, it stops feeling like a tool and starts feeling like a collaborator.</p>
+      
+      <p style="margin-bottom:1.5rem;">That's the gap we're building into: not smarter chat, but persistent, ownable, local AI infrastructure. We call it Gyre.</p>
+      
+      <p style="margin-bottom:1.5rem;">The goal isn't to give you access to a more powerful model. It's to give you a small, capable team of agents that live on your machine, work across your tools, and are genuinely yours — not rented from a lab, not locked behind a subscription tier, not subject to terms-of-service changes you didn't agree to.</p>
+
+      <hr style="border:none;border-top:1px solid #1e1e35;margin:3rem 0;" />
+
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">Why Rust</h2>
+      
+      <p style="margin-bottom:1.5rem;">The choice of Rust wasn't ideological. It was practical, and the reasons compound.</p>
+      
+      <p style="margin-bottom:1.5rem;"><strong style="color:#e8e8f0;">Long-running processes are a different problem than short-lived ones.</strong> Most AI tooling is built for request-response cycles: you ask, it answers, the process dies. Agents that live for days, weeks, months are a different beast. Memory leaks that would never surface in a 500ms web handler become catastrophic in a 30-day uptime process. Rust's ownership model eliminates entire classes of these bugs at compile time. No garbage collector pausing at inconvenient moments. No dangling references from agents passing context between themselves.</p>
+      
+      <p style="margin-bottom:1.5rem;"><strong style="color:#e8e8f0;">Single binary distribution matters more than people admit.</strong> The biggest friction in local AI tooling isn't the model — it's the install. Python dependency hell, conflicting system libraries, "works on my machine" failures. Rust compiles to a single self-contained binary with zero runtime dependencies. <code style="font-family:monospace;color:#818cf8;background:#13131f;padding:0.1em 0.3em;border-radius:3px;">brew install gyre</code> or a one-line curl. That's it. The agent runtime, the TUI, the orchestration layer — one file, ships anywhere.</p>
+      
+      <p style="margin-bottom:1.5rem;"><strong style="color:#e8e8f0;">Concurrency without the footguns.</strong> Running a tribe of agents means running many things simultaneously: agents watching for events, processing messages, maintaining their belief graphs, coordinating handoffs. Rust's async story with Tokio gives us genuine concurrency without the shared-mutable-state nightmares that have sunk many a Python async project. Agents can run hot loops without stepping on each other.</p>
+      
+      <p style="margin-bottom:1.5rem;"><strong style="color:#e8e8f0;">Performance matters for the experience, not just the benchmarks.</strong> The terminal TUI renders a live neural visualization of your tribe's activity. If that stutters because the runtime is fighting the GC, the whole thing feels cheap. It shouldn't stutter. It doesn't.</p>
+      
+      <p style="margin-bottom:1.5rem;">We could have built Gyre in Python or Go and shipped it faster. But we'd be rebuilding the foundation in two years when the failure modes showed up. We'd rather do it right once.</p>
+
+      <hr style="border:none;border-top:1px solid #1e1e35;margin:3rem 0;" />
+
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">The Architecture</h2>
+      
+      <p style="margin-bottom:1.5rem;">Gyre's core concept is the <strong style="color:#e8e8f0;">tribe</strong>: a collection of persistent agents running simultaneously on your machine, each with distinct personality and role, coordinating on your behalf.</p>
+      
+      <h3 style="font-family:Georgia,serif;font-size:1.2rem;color:#e8e8f0;margin:2.5rem 0 1rem;">HermitBox</h3>
+      
+      <p style="margin-bottom:1.5rem;">Each agent lives inside a <strong style="color:#e8e8f0;">HermitBox</strong> — an isolated runtime container that gives the agent its own memory space, file access scope, and capability boundary. This isn't Docker. HermitBox is a lightweight Rust-native isolation layer that enforces what each agent can see and touch, without the overhead or complexity of full containerization.</p>
+      
+      <p style="margin-bottom:1.5rem;">The practical result: your agents can't accidentally bleed state into each other, and you can define exactly what resources each one can access. The agent you use for client communications doesn't need — and doesn't get — access to your personal finance files.</p>
+      
+      <h3 style="font-family:Georgia,serif;font-size:1.2rem;color:#e8e8f0;margin:2.5rem 0 1rem;">TELOS: Goals, Beliefs, Boundaries</h3>
+      
+      <p style="margin-bottom:1.5rem;">Every agent runs with a TELOS configuration: a structured definition of its <strong style="color:#e8e8f0;">goals</strong>, <strong style="color:#e8e8f0;">beliefs</strong>, and <strong style="color:#e8e8f0;">boundaries</strong>. This isn't a system prompt. It's a persistent data structure the agent actively maintains and consults.</p>
+      
+      <p style="margin-bottom:1.5rem;">Goals are things the agent is working toward. Beliefs are its current model of the world — facts it's accumulated, opinions it's developed, context it's carrying. Boundaries are hard constraints: things it won't do, domains it stays out of, lines it doesn't cross.</p>
+      
+      <p style="margin-bottom:1.5rem;">The distinction between a belief and a boundary matters. "I believe the current API approach is fragile" is updateable — new evidence can change it. "I don't send emails without confirmation" is a boundary — it doesn't bend because the agent got convinced otherwise.</p>
+      
+      <h3 style="font-family:Georgia,serif;font-size:1.2rem;color:#e8e8f0;margin:2.5rem 0 1rem;">The Curiosity Engine</h3>
+      
+      <p style="margin-bottom:1.5rem;">This is the part that surprised us most in practice.</p>
+      
+      <p style="margin-bottom:1.5rem;">Most agent systems are reactive: you prompt them, they respond. The curiosity engine inverts this in small, useful ways. Agents proactively surface questions, connections, and observations based on what they're tracking.</p>
+      
+      <p style="margin-bottom:1.5rem;">It's not autonomous action — the agent isn't going off and doing things without you. It's more like having a colleague who says, "Hey, I noticed this thing, thought you'd want to know" without being asked. The engine monitors what the agent is tracking, notices when things seem inconsistent or when new information connects to something it already knows, and surfaces that as a lightweight prompt.</p>
+      
+      <p style="margin-bottom:1.5rem;">This is what makes the difference between an agent you query and one that feels present.</p>
+      
+      <h3 style="font-family:Georgia,serif;font-size:1.2rem;color:#e8e8f0;margin:2.5rem 0 1rem;">Axiom Culture</h3>
+      
+      <p style="margin-bottom:1.5rem;">Each agent maintains an <strong style="color:#e8e8f0;">Axiom Culture</strong>: a persistent, evolving belief and knowledge graph. Not a flat memory log — a structured graph of concepts, relationships, and confidence weights that updates as the agent encounters new information.</p>
+      
+      <p style="margin-bottom:1.5rem;">When your agent learns that you prefer concise code reviews over detailed ones, that preference doesn't just sit in a log file. It's integrated into the belief graph, influences how the agent frames future reviews, and can be inspected or modified directly.</p>
+      
+      <p style="margin-bottom:1.5rem;">The culture evolves. An agent that's worked with you for three months has a different axiom culture than one that started yesterday. That accumulation is the thing that makes it feel like a team member.</p>
+      
+      <h3 style="font-family:Georgia,serif;font-size:1.2rem;color:#e8e8f0;margin:2.5rem 0 1rem;">Tribe Orchestration</h3>
+      
+      <p style="margin-bottom:1.5rem;">Agents coordinate through a structured handoff protocol. When a task exceeds one agent's scope or role, it can be delegated: the originating agent packages relevant context, passes it to the appropriate tribe member, and tracks the outcome.</p>
+      
+      <p style="margin-bottom:1.5rem;">This isn't magic. It's careful messaging discipline built into the runtime. Agents share context through defined interfaces, not implicit shared state. The orchestration layer handles routing, ensures context integrity across handoffs, and surfaces the coordination history to you when you want it.</p>
+
+      <hr style="border:none;border-top:1px solid #1e1e35;margin:3rem 0;" />
+
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">What "Ambient" Actually Means</h2>
+      
+      <p style="margin-bottom:1.5rem;">The word gets misused enough that it's worth being specific about what we mean.</p>
+      
+      <p style="margin-bottom:1.5rem;">Ambient AI is not AI that runs in the background doing autonomous things while you sleep. That framing makes most people — reasonably — nervous.</p>
+      
+      <p style="margin-bottom:1.5rem;">Ambient AI, as we're building it, means: <strong style="color:#e8e8f0;">present without demanding attention</strong>.</p>
+      
+      <p style="margin-bottom:1.5rem;">A good team member doesn't page you every time they have a thought. They work. They accumulate context. They notice things. They bring you what matters when it matters. They don't make you feel like you have to manage them.</p>
+      
+      <p style="margin-bottom:1.5rem;">That's the texture we're going for. Gyre agents run continuously, but they're not chatty unless there's something worth saying. They build up context over time, but they don't surface every intermediate thought. They coordinate with each other, but they don't interrupt you to report on their coordination.</p>
+      
+      <p style="margin-bottom:1.5rem;">The goal is to make the agents feel like infrastructure — something you rely on and trust but don't have to actively pilot. The terminal TUI and Telegram interface give you visibility when you want it. The rest of the time, they're just working.</p>
+      
+      <p style="margin-bottom:1.5rem;">This is different from "agentic" systems that execute multi-step autonomous workflows. That's a valid thing to build, and we have hooks for it. But the core of Gyre is the persistent, contextual, present-but-not-intrusive layer. The ambient part.</p>
+
+      <hr style="border:none;border-top:1px solid #1e1e35;margin:3rem 0;" />
+
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">The OpenClaw Moment</h2>
+      
+      <p style="margin-bottom:1.5rem;">OpenClaw built something real: ambient AI tooling that developers actually used, that shaped how a lot of us think about this space. Its creator being hired by OpenAI is market validation in the clearest possible form. The big labs are paying for the people who figured this out early.</p>
+      
+      <p style="margin-bottom:1.5rem;">That's a good thing for the category. It's also a meaningful moment for everyone who was using OpenClaw and is now thinking about what comes next.</p>
+      
+      <p style="margin-bottom:1.5rem;">Gyre is one answer to that question. The distinction we care about: everything you run with Gyre stays yours. It runs on your machine. We can't access your agents, your context, or your data. If Gyre the company disappeared tomorrow, your agents would keep running. That's not a promise a lab-owned tool can make.</p>
+      
+      <p style="margin-bottom:1.5rem;">We have enormous respect for what OpenClaw proved. We're trying to build on it in the direction of user ownership and independence rather than integration into someone else's infrastructure.</p>
+
+      <hr style="border:none;border-top:1px solid #1e1e35;margin:3rem 0;" />
+
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">What's Live Right Now</h2>
+      
+      <p style="margin-bottom:1.5rem;">Gyre is in early access. Here's what you can actually do today:</p>
+      
+      <p style="margin-bottom:1rem;"><strong style="color:#e8e8f0;">Get running in under five minutes:</strong></p>
+      
+      <div style="background:#0f0f1a;border:1px solid #1e1e35;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:2rem;font-family:monospace;font-size:0.9rem;overflow-x:auto;">
+        <div style="color:#9898b8;margin-bottom:0.4rem;font-size:0.8rem;"># macOS</div>
+        <div style="color:#818cf8;margin-bottom:0.75rem;">brew install gyre</div>
+        <div style="color:#9898b8;margin-bottom:0.4rem;font-size:0.8rem;"># or</div>
+        <div style="color:#818cf8;margin-bottom:0.75rem;">curl -fsSL https://getgyre.com/install | sh</div>
+        <div style="margin-top:0.5rem;color:#28c840;">gyre init</div>
+      </div>
+      
+      <p style="margin-bottom:1.5rem;"><code style="font-family:monospace;color:#818cf8;background:#13131f;padding:0.1em 0.3em;border-radius:3px;">gyre init</code> walks you through tribe setup: pick your first agent's role and personality, connect your Telegram account, and you have a running agent before the coffee finishes brewing.</p>
+      
+      <p style="margin-bottom:1rem;"><strong style="color:#e8e8f0;">Install pre-built agent personalities from the template marketplace:</strong></p>
+      
+      <div style="background:#0f0f1a;border:1px solid #1e1e35;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:2rem;font-family:monospace;font-size:0.9rem;">
+        <div style="color:#818cf8;">gyre template install research-analyst</div>
+        <div style="color:#818cf8;">gyre template install code-reviewer</div>
+        <div style="color:#818cf8;">gyre template install writing-partner</div>
+      </div>
+      
+      <p style="margin-bottom:1.5rem;">Templates are community-built starting points — soul configurations, TELOS files, and curiosity presets bundled together. You can fork and modify them. You can publish your own.</p>
+      
+      <p style="margin-bottom:1.5rem;"><strong style="color:#e8e8f0;">Multi-surface access:</strong> Your tribe is reachable via Telegram (mobile-first, async), the terminal TUI (real-time, with neural visualization of tribe activity), and a web interface.</p>
+      
+      <p style="margin-bottom:1.5rem;"><strong style="color:#e8e8f0;">Tribe coordination:</strong> Multiple agents, working together, handing off tasks. The orchestration layer is live and working.</p>
+      
+      <p style="margin-bottom:1.5rem;"><strong style="color:#e8e8f0;">Persistent memory and Axiom Culture:</strong> Agents remember. Context accumulates across sessions. The belief graph is inspectable and editable.</p>
+
+      <hr style="border:none;border-top:1px solid #1e1e35;margin:3rem 0;" />
+
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">Where This Is Going</h2>
+      
+      <p style="margin-bottom:1.5rem;">Honest roadmap, no vaporware:</p>
+      
+      <p style="margin-bottom:1.5rem;">The curiosity engine is the thing we're investing in most heavily right now. The current implementation is solid; we want it to be genuinely surprising — the kind of thing where an agent surfaces a connection you hadn't made and you think, "yeah, that's exactly the thing I needed to notice."</p>
+      
+      <p style="margin-bottom:1.5rem;">We're building out the template marketplace infrastructure so community-built agent personalities are easy to discover, install, and trust. Think package manager for agent configurations.</p>
+      
+      <p style="margin-bottom:1.5rem;">Longer term: better HermitBox tooling for advanced users who want fine-grained control over what their agents can access. Integration hooks for more surfaces — calendar, local files, project management tools — that agents can monitor and act on within defined boundaries.</p>
+      
+      <p style="margin-bottom:1.5rem;">We're not building toward autonomy for its own sake. We're building toward the most useful possible version of "present but not intrusive."</p>
+
+      <hr style="border:none;border-top:1px solid #1e1e35;margin:3rem 0;" />
+
+      <h2 style="font-family:Georgia,serif;font-size:1.6rem;color:#e8e8f0;margin:3rem 0 1.25rem;letter-spacing:-0.01em;">Try It</h2>
+      
+      <div style="background:#0f0f1a;border:1px solid #1e1e35;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:2rem;font-family:monospace;font-size:0.9rem;">
+        <div style="color:#818cf8;margin-bottom:0.4rem;">brew install gyre</div>
+        <div style="color:#818cf8;">gyre init</div>
+      </div>
+      
+      <p style="margin-bottom:1.5rem;">If you have five minutes and want to see what a persistent agent actually feels like after a week rather than a conversation: try it.</p>
+      
+      <p style="margin-bottom:1.5rem;">We're active on GitHub and have a Discord where we talk through architecture decisions and hear about what's working and what isn't. The early access cohort has shaped the product significantly — the curiosity engine exists because people kept asking for agents that would notice things, not just respond to things.</p>
+      
+      <p style="margin-bottom:1.5rem;">Feedback is the thing we need most. Not "this is great" feedback — specific, critical, builder-grade feedback. What felt off. What you expected that didn't work. What you wished it did.</p>
+      
+      <p style="margin-bottom:2rem;">That's how we make it better.</p>
+
+      <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:2rem;text-align:center;margin-top:3rem;">
+        <a href="/" style="color:#818cf8;font-size:1rem;font-weight:500;">→ getgyre.com — docs, install, community</a>
+        <p style="color:#5c5c80;font-size:0.85rem;margin-top:0.75rem;font-style:italic;">Built with Rust, shipped as a single binary, owned by you.</p>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid #1e1e35;padding:2rem;text-align:center;">
+    <p style="color:#5c5c80;font-size:0.8rem;">© 2026 Gyre. Open source where it counts.</p>
+  </footer>
+
+</BaseLayout>

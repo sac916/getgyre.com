@@ -1,0 +1,73 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
+const {
+  title = 'Gyre — Ambient AI OS',
+  description = 'Run a tribe of persistent AI agents on your machine. Memory, personality, curiosity — yours to own. brew install gyre',
+  ogTitle = 'Gyre — Your AI tribe. Persistent. Curious. Yours.',
+  ogDescription = 'An ambient AI OS written in Rust. Run a team of agents that think, remember, and work together. No cloud lock-in.',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta property="og:title" content={ogTitle} />
+  <meta property="og:description" content={ogDescription} />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={ogTitle} />
+  <meta name="twitter:description" content={ogDescription} />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #0f0f1a;
+      --card: #13131f;
+      --border: #1e1e35;
+      --muted: #2a2a45;
+      --indigo: #6366f1;
+      --indigo-light: #818cf8;
+      --text: #e8e8f0;
+      --text-secondary: #9898b8;
+      --text-muted: #5c5c80;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); color: var(--text); }
+    body { 
+      background: var(--bg); 
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    h1, h2, h3, h4 {
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.2;
+    }
+    code, pre, .mono {
+      font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    }
+    a { color: var(--indigo-light); text-decoration: none; }
+    a:hover { color: var(--text); }
+    ::selection { background: rgba(99, 102, 241, 0.3); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <slot />
+</body>
+</html>

@@ -1,0 +1,151 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Install Gyre — Ambient AI OS"
+  description="Get Gyre running in under five minutes. brew install gyre or curl -fsSL https://getgyre.com/install | sh"
+>
+  <!-- Nav -->
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #1e1e35;padding:0 2rem;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;">
+      <a href="/" style="font-family:Georgia,serif;font-size:1.25rem;font-weight:bold;color:#e8e8f0;letter-spacing:-0.02em;">gyre</a>
+      <div style="display:flex;gap:2rem;align-items:center;">
+        <a href="/docs" style="color:#9898b8;font-size:0.875rem;">Docs</a>
+        <a href="/#pricing" style="color:#9898b8;font-size:0.875rem;">Pricing</a>
+        <a href="/blog/building-ambient-ai-os-in-rust" style="color:#9898b8;font-size:0.875rem;">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main style="max-width:760px;margin:0 auto;padding:5rem 2rem 8rem;">
+    
+    <header style="text-align:center;margin-bottom:4rem;">
+      <h1 style="font-family:Georgia,serif;font-size:clamp(2.25rem,4vw,3rem);margin-bottom:1rem;letter-spacing:-0.02em;">
+        Get Gyre
+      </h1>
+      <p style="color:#9898b8;font-size:1.1rem;line-height:1.7;">
+        Zero dependencies. Single binary. Running in under five minutes.
+      </p>
+    </header>
+
+    <!-- Option 1: Homebrew -->
+    <div style="margin-bottom:2.5rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;font-weight:600;color:#818cf8;">1</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.3rem;">macOS (Homebrew)</h2>
+        <span style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);color:#818cf8;font-size:0.7rem;padding:0.15rem 0.6rem;border-radius:100px;letter-spacing:0.05em;">RECOMMENDED</span>
+      </div>
+      <p style="color:#9898b8;font-size:0.9rem;margin-bottom:1rem;">The fastest way to install and keep Gyre updated.</p>
+      <div style="background:#0f0f1a;border:1px solid #1e1e35;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+        <span style="color:#5c5c80;font-family:monospace;font-size:0.8rem;user-select:none;">$</span>
+        <code style="color:#818cf8;font-family:'JetBrains Mono',monospace;font-size:0.95rem;flex:1;" id="cmd-homebrew">brew install gyre</code>
+        <button onclick="copyInstall('brew install gyre','btn-homebrew')" id="btn-homebrew" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#818cf8;padding:0.4rem 0.9rem;border-radius:6px;font-size:0.8rem;cursor:pointer;white-space:nowrap;">Copy</button>
+      </div>
+    </div>
+
+    <!-- Option 2: curl -->
+    <div style="margin-bottom:2.5rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;font-weight:600;color:#818cf8;">2</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.3rem;">macOS / Linux (install script)</h2>
+      </div>
+      <p style="color:#9898b8;font-size:0.9rem;margin-bottom:1rem;">Auto-detects your OS and architecture. Downloads the correct binary.</p>
+      <div style="background:#0f0f1a;border:1px solid #1e1e35;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+        <span style="color:#5c5c80;font-family:monospace;font-size:0.8rem;user-select:none;">$</span>
+        <code style="color:#818cf8;font-family:'JetBrains Mono',monospace;font-size:0.88rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="cmd-curl2">curl -fsSL https://getgyre.com/install | sh</code>
+        <button onclick="copyInstall('curl -fsSL https://getgyre.com/install | sh','btn-curl2')" id="btn-curl2" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#818cf8;padding:0.4rem 0.9rem;border-radius:6px;font-size:0.8rem;cursor:pointer;white-space:nowrap;">Copy</button>
+      </div>
+    </div>
+
+    <!-- Option 3: wget -->
+    <div style="margin-bottom:3.5rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;font-weight:600;color:#818cf8;">3</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.3rem;">Direct download</h2>
+      </div>
+      <p style="color:#9898b8;font-size:0.9rem;margin-bottom:1rem;">Download the binary for your platform directly.</p>
+      <div style="background:#0f0f1a;border:1px solid #1e1e35;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
+        <span style="color:#5c5c80;font-family:monospace;font-size:0.8rem;user-select:none;">$</span>
+        <code style="color:#818cf8;font-family:'JetBrains Mono',monospace;font-size:0.82rem;flex:1;overflow-x:auto;" id="cmd-wget">wget https://releases.getgyre.com/latest/gyre-$(uname -m)-apple-darwin</code>
+        <button onclick="copyInstall('wget https://releases.getgyre.com/latest/gyre-$(uname -m)-apple-darwin','btn-wget')" id="btn-wget" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#818cf8;padding:0.4rem 0.9rem;border-radius:6px;font-size:0.8rem;cursor:pointer;white-space:nowrap;flex-shrink:0;">Copy</button>
+      </div>
+      <p style="color:#5c5c80;font-size:0.8rem;">Replace <code style="font-family:monospace;color:#818cf8;">apple-darwin</code> with <code style="font-family:monospace;color:#818cf8;">unknown-linux-gnu</code> for Linux.</p>
+    </div>
+
+    <!-- Verify -->
+    <div style="background:#0f0f1a;border:1px solid #1e1e35;border-radius:12px;padding:1.75rem;margin-bottom:2.5rem;">
+      <h3 style="font-family:Georgia,serif;font-size:1.1rem;margin-bottom:1rem;">Verify installation</h3>
+      <div style="background:#0a0a0f;border:1px solid #1e1e35;border-radius:8px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
+        <span style="color:#5c5c80;font-family:monospace;font-size:0.8rem;">$</span>
+        <code style="color:#818cf8;font-family:monospace;font-size:0.9rem;flex:1;">gyre --version</code>
+        <button onclick="copyInstall('gyre --version','btn-version')" id="btn-version" style="background:transparent;border:1px solid #2a2a45;color:#5c5c80;padding:0.3rem 0.6rem;border-radius:5px;font-size:0.75rem;cursor:pointer;">Copy</button>
+      </div>
+      <p style="color:#5c5c80;font-size:0.875rem;">You should see something like: <code style="font-family:monospace;color:#9898b8;">gyre 0.1.0</code></p>
+    </div>
+
+    <!-- Next steps -->
+    <div style="background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:2rem;">
+      <h3 style="font-family:Georgia,serif;font-size:1.2rem;margin-bottom:1.25rem;color:#e8e8f0;">What happens next</h3>
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;color:#818cf8;margin-top:0.1rem;">1</div>
+          <div>
+            <div style="color:#e8e8f0;font-size:0.95rem;margin-bottom:0.25rem;">Run <code style="font-family:monospace;color:#818cf8;">gyre init</code></div>
+            <div style="color:#9898b8;font-size:0.875rem;">Walks you through setting up your first agent — name, role, Telegram connection, LLM provider.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;color:#818cf8;margin-top:0.1rem;">2</div>
+          <div>
+            <div style="color:#e8e8f0;font-size:0.95rem;margin-bottom:0.25rem;">Run <code style="font-family:monospace;color:#818cf8;">gyre serve</code></div>
+            <div style="color:#9898b8;font-size:0.875rem;">Starts your tribe. Your agent is now live on Telegram and the terminal TUI.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;color:#818cf8;margin-top:0.1rem;">3</div>
+          <div>
+            <div style="color:#e8e8f0;font-size:0.95rem;margin-bottom:0.25rem;">Add more agents</div>
+            <div style="color:#9898b8;font-size:0.875rem;">Browse the template gallery or build your own. <code style="font-family:monospace;color:#818cf8;">gyre template install &lt;name&gt;</code></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid rgba(99,102,241,0.15);display:flex;gap:1.5rem;flex-wrap:wrap;">
+        <a href="/docs" style="color:#818cf8;font-size:0.9rem;">Read the quickstart →</a>
+        <a href="/" style="color:#9898b8;font-size:0.9rem;">Back to home →</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer style="border-top:1px solid #1e1e35;padding:2rem;text-align:center;">
+    <p style="color:#5c5c80;font-size:0.8rem;">© 2026 Gyre. Open source where it counts.</p>
+  </footer>
+
+</BaseLayout>
+
+<script is:inline>
+function copyInstall(text, btnId) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.style.color = '#28c840';
+      btn.style.borderColor = '#28c840';
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.style.color = '';
+        btn.style.borderColor = '';
+      }, 2000);
+    }
+  }).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  });
+}
+</script>

@@ -32,21 +32,33 @@ const {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0a0a0f;
-      --surface: #0f0f1a;
-      --card: #13131f;
-      --border: #1e1e35;
-      --muted: #2a2a45;
-      --indigo: #6366f1;
-      --indigo-light: #818cf8;
-      --text: #e8e8f0;
-      --text-secondary: #9898b8;
-      --text-muted: #5c5c80;
+      /* The Abyss — dark ocean, no surface light */
+      --bg: #080d1a;
+      --bg-deep: #030508;
+      --surface: #060c16;
+      --card: #040a12;
+      --border: rgba(0, 120, 160, 0.14);
+      --border-solid: #0d1f2e;
+      --muted: #0d1e2a;
+      /* Accent: desaturated deep teal — a glow, not a color */
+      --teal: rgba(0, 120, 160, 0.85);
+      --teal-light: #00aed0;
+      --teal-glow: rgba(0, 120, 160, 0.12);
+      --teal-border: rgba(0, 120, 160, 0.25);
+      /* Text */
+      --text: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.65);
+      --text-muted: rgba(255, 255, 255, 0.35);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { background: var(--bg); color: var(--text); }
-    body { 
-      background: var(--bg); 
+    html {
+      background: var(--bg);
+      color: var(--text);
+    }
+    body {
+      /* Page darkens as you scroll — like descending into the abyss */
+      background: linear-gradient(to bottom, var(--bg) 0%, #060b14 40%, #040810 70%, var(--bg-deep) 100%);
+      background-attachment: fixed;
       color: var(--text);
       font-family: 'Inter', system-ui, sans-serif;
       line-height: 1.6;
@@ -59,9 +71,9 @@ const {
     code, pre, .mono {
       font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
     }
-    a { color: var(--indigo-light); text-decoration: none; }
+    a { color: var(--teal-light); text-decoration: none; }
     a:hover { color: var(--text); }
-    ::selection { background: rgba(99, 102, 241, 0.3); }
+    ::selection { background: rgba(0, 120, 160, 0.25); }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }

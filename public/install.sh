@@ -6,7 +6,7 @@
 set -e
 
 GYRE_VERSION="${GYRE_VERSION:-latest}"
-RELEASES_BASE="https://github.com/SargassoLLC/gyre-rust/releases"
+RELEASES_BASE="https://github.com/SargassoLLC/gyre/releases"
 INSTALL_DIR="${GYRE_INSTALL_DIR:-/usr/local/bin}"
 
 # ─── Colors ────────────────────────────────────────────────────────────────────

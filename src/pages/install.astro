@@ -34,13 +34,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
         <div style="width:28px;height:28px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.22);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;font-weight:600;color:#00aed0;">1</div>
         <h2 style="font-family:Georgia,serif;font-size:1.3rem;">macOS (Homebrew)</h2>
-        <span style="background:rgba(0,120,160,0.1);border:1px solid rgba(0,120,160,0.22);color:#00aed0;font-size:0.7rem;padding:0.15rem 0.6rem;border-radius:100px;letter-spacing:0.05em;">RECOMMENDED</span>
+        <span style="background:rgba(255,180,0,0.1);border:1px solid rgba(255,180,0,0.22);color:#f0a800;font-size:0.7rem;padding:0.15rem 0.6rem;border-radius:100px;letter-spacing:0.05em;">COMING SOON</span>
       </div>
-      <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:1rem;">The fastest way to install and keep Gyre updated.</p>
-      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+      <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:1rem;">Homebrew tap is in progress. Use the install script below in the meantime.</p>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;opacity:0.5;pointer-events:none;">
         <span style="color:rgba(255,255,255,0.35);font-family:monospace;font-size:0.8rem;user-select:none;">$</span>
-        <code style="color:#00aed0;font-family:'JetBrains Mono',monospace;font-size:0.95rem;flex:1;" id="cmd-homebrew">brew install gyre</code>
-        <button onclick="copyInstall('brew install gyre','btn-homebrew')" id="btn-homebrew" style="background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.22);color:#00aed0;padding:0.4rem 0.9rem;border-radius:6px;font-size:0.8rem;cursor:pointer;white-space:nowrap;">Copy</button>
+        <code style="color:#00aed0;font-family:'JetBrains Mono',monospace;font-size:0.95rem;flex:1;">brew install gyre</code>
       </div>
     </div>
 
@@ -91,14 +90,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.22);display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;color:#00aed0;margin-top:0.1rem;">1</div>
           <div>
-            <div style="color:#ffffff;font-size:0.95rem;margin-bottom:0.25rem;">Run <code style="font-family:monospace;color:#00aed0;">gyre init</code></div>
+            <div style="color:#ffffff;font-size:0.95rem;margin-bottom:0.25rem;">Run <code style="font-family:monospace;color:#00aed0;">gyre setup</code></div>
             <div style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Walks you through setting up your first agent — name, role, Telegram connection, LLM provider.</div>
           </div>
         </div>
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.22);display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;color:#00aed0;margin-top:0.1rem;">2</div>
           <div>
-            <div style="color:#ffffff;font-size:0.95rem;margin-bottom:0.25rem;">Run <code style="font-family:monospace;color:#00aed0;">gyre serve</code></div>
+            <div style="color:#ffffff;font-size:0.95rem;margin-bottom:0.25rem;">Run <code style="font-family:monospace;color:#00aed0;">gyre run</code></div>
             <div style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Starts your tribe. Your agent is now live on Telegram and the terminal TUI.</div>
           </div>
         </div>

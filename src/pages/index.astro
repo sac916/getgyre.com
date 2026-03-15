@@ -41,17 +41,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <!-- Install command -->
       <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;margin-bottom:2rem;">
-        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:0.875rem 1.5rem;display:flex;align-items:center;gap:1rem;min-width:360px;position:relative;">
-          <span style="color:rgba(255,255,255,0.35);font-family:monospace;font-size:0.8rem;user-select:none;">$</span>
-          <code style="color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:0.95rem;flex:1;text-align:left;" id="cmd-brew">brew install gyre</code>
-          <button onclick="copyCmd('brew install gyre','btn-brew')" id="btn-brew" style="background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.22);color:#00aed0;padding:0.3rem 0.75rem;border-radius:5px;font-size:0.75rem;cursor:pointer;white-space:nowrap;transition:all 0.2s;">Copy</button>
-        </div>
-        <div style="color:rgba(255,255,255,0.35);font-size:0.8rem;">or</div>
         <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:0.875rem 1.5rem;display:flex;align-items:center;gap:1rem;min-width:360px;">
           <span style="color:rgba(255,255,255,0.35);font-family:monospace;font-size:0.8rem;user-select:none;">$</span>
           <code style="color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:0.78rem;flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="cmd-curl">curl -fsSL https://getgyre.com/install | sh</code>
           <button onclick="copyCmd('curl -fsSL https://getgyre.com/install | sh','btn-curl')" id="btn-curl" style="background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.22);color:#00aed0;padding:0.3rem 0.75rem;border-radius:5px;font-size:0.75rem;cursor:pointer;white-space:nowrap;transition:all 0.2s;">Copy</button>
         </div>
+        <div style="color:rgba(255,255,255,0.35);font-size:0.75rem;font-style:italic;">brew tap coming soon · macOS &amp; Linux · single binary</div>
       </div>
       
       <p style="font-size:0.85rem;color:rgba(255,255,255,0.35);margin-bottom:2.5rem;font-style:italic;">
@@ -75,14 +70,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="width:12px;height:12px;border-radius:50%;background:#ff5f57;"></div>
           <div style="width:12px;height:12px;border-radius:50%;background:#febc2e;"></div>
           <div style="width:12px;height:12px;border-radius:50%;background:#28c840;"></div>
-          <span style="margin-left:0.5rem;color:rgba(255,255,255,0.35);font-size:0.8rem;font-family:monospace;">gyre init</span>
+          <span style="margin-left:0.5rem;color:rgba(255,255,255,0.35);font-size:0.8rem;font-family:monospace;">gyre setup</span>
         </div>
         <div style="padding:3rem 2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:260px;position:relative;">
           <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(0,120,160,0.02) 40px,rgba(0,120,160,0.02) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(0,120,160,0.02) 40px,rgba(0,120,160,0.02) 41px);"></div>
           <div style="position:relative;text-align:center;">
             <div style="width:64px;height:64px;border-radius:50%;background:rgba(0,120,160,0.1);border:1px solid rgba(0,120,160,0.22);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;">⚡</div>
             <p style="color:rgba(255,255,255,0.35);font-size:0.9rem;font-style:italic;">Demo GIF coming soon</p>
-            <p style="color:#0d1e2a;font-size:0.8rem;margin-top:0.5rem;font-family:monospace;">gyre init → agent online → first message in Telegram</p>
+            <p style="color:#0d1e2a;font-size:0.8rem;margin-top:0.5rem;font-family:monospace;">gyre setup → gyre run → first message</p>
           </div>
         </div>
       </div>
@@ -177,7 +172,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         From zero to running agent in under five minutes.
       </h2>
       <p style="color:rgba(255,255,255,0.35);margin-bottom:3rem;font-size:1rem;">
-        <code style="font-family:monospace;">gyre init</code> asks four questions. Name your agent, tell it who it serves, connect your LLM. That's it.
+        <code style="font-family:monospace;">gyre setup</code> asks four questions. Name your agent, tell it who it serves, connect your LLM. That's it.
       </p>
 
       <!-- Demo GIF placeholder -->
@@ -186,14 +181,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="width:12px;height:12px;border-radius:50%;background:#ff5f57;"></div>
           <div style="width:12px;height:12px;border-radius:50%;background:#febc2e;"></div>
           <div style="width:12px;height:12px;border-radius:50%;background:#28c840;"></div>
-          <span style="margin-left:auto;color:rgba(255,255,255,0.35);font-size:0.8rem;font-family:monospace;">gyre init → gyre serve → first message</span>
+          <span style="margin-left:auto;color:rgba(255,255,255,0.35);font-size:0.8rem;font-family:monospace;">gyre setup → gyre run → first message</span>
         </div>
         <div style="padding:4rem 2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;position:relative;">
           <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(0,120,160,0.05) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(0,120,160,0.03) 0%,transparent 60%);"></div>
           <div style="position:relative;text-align:center;">
             <!-- Simulated terminal activity -->
             <div style="font-family:monospace;font-size:0.85rem;text-align:left;background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1.5rem;margin-bottom:1.5rem;min-width:400px;">
-              <div style="color:#28c840;margin-bottom:0.4rem;">$ gyre init</div>
+              <div style="color:#28c840;margin-bottom:0.4rem;">$ gyre setup</div>
               <div style="color:rgba(255,255,255,0.65);margin-bottom:0.2rem;">◆ What should we call this agent? <span style="color:#00aed0;">Kimi</span></div>
               <div style="color:rgba(255,255,255,0.65);margin-bottom:0.2rem;">◆ Who does Kimi serve? <span style="color:#00aed0;">my team</span></div>
               <div style="color:rgba(255,255,255,0.65);margin-bottom:0.2rem;">◆ Connect Telegram? <span style="color:#00aed0;">yes</span></div>
@@ -207,7 +202,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <p style="color:rgba(255,255,255,0.35);font-size:0.875rem;font-style:italic;">
-        What you're watching: <code style="font-family:monospace;">gyre init</code> → <code style="font-family:monospace;">gyre serve</code> → first message in Telegram. Recorded in real time.
+        What you're watching: <code style="font-family:monospace;">gyre setup</code> → <code style="font-family:monospace;">gyre run</code> → first message in Telegram. Recorded in real time.
       </p>
     </div>
   </section>
@@ -437,7 +432,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:12px;padding:2rem;">
           <div style="font-size:1.5rem;margin-bottom:1rem;">⚡</div>
           <h3 style="font-family:Georgia,serif;font-size:1.2rem;margin-bottom:0.75rem;">Quickstart</h3>
-          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;">Install Gyre, run <code style="font-family:monospace;color:#00aed0;">gyre init</code>, connect your first agent. You'll be talking to a running cognitive agent in under five minutes.</p>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;">Install Gyre, run <code style="font-family:monospace;color:#00aed0;">gyre setup</code>, connect your first agent. You'll be talking to a running cognitive agent in under five minutes.</p>
           <a href="/docs" style="color:#00aed0;font-size:0.9rem;">Read quickstart →</a>
         </div>
 
@@ -451,7 +446,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:12px;padding:2rem;">
           <div style="font-size:1.5rem;margin-bottom:1rem;">📖</div>
           <h3 style="font-family:Georgia,serif;font-size:1.2rem;margin-bottom:0.75rem;">CLI Reference</h3>
-          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;">Every command. Every flag. <code style="font-family:monospace;color:#00aed0;">gyre init</code>, <code style="font-family:monospace;color:#00aed0;">gyre serve</code>, <code style="font-family:monospace;color:#00aed0;">gyre doctor</code>, <code style="font-family:monospace;color:#00aed0;">gyre template</code>, <code style="font-family:monospace;color:#00aed0;">gyre license</code>. Complete reference.</p>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;">Every command. Every flag. <code style="font-family:monospace;color:#00aed0;">gyre setup</code>, <code style="font-family:monospace;color:#00aed0;">gyre run</code>, <code style="font-family:monospace;color:#00aed0;">gyre doctor</code>, <code style="font-family:monospace;color:#00aed0;">gyre template</code>, <code style="font-family:monospace;color:#00aed0;">gyre license</code>. Complete reference.</p>
           <a href="/docs" style="color:#00aed0;font-size:0.9rem;">Read CLI docs →</a>
         </div>
 

@@ -6,7 +6,7 @@
 set -e
 
 GYRE_VERSION="${GYRE_VERSION:-latest}"
-RELEASES_BASE="https://releases.getgyre.com"
+RELEASES_BASE="https://github.com/SargassoLLC/gyre-rust/releases"
 INSTALL_DIR="${GYRE_INSTALL_DIR:-/usr/local/bin}"
 
 # ─── Colors ────────────────────────────────────────────────────────────────────
@@ -64,7 +64,7 @@ download_binary() {
   local dest="$2"
 
   if [ "$DOWNLOADER" = "curl" ]; then
-    curl -fsSL --progress-bar "$url" -o "$dest"
+    curl -fsSL --progress-bar -L "$url" -o "$dest"
   else
     wget -q --show-progress "$url" -O "$dest"
   fi
@@ -82,7 +82,11 @@ main() {
   OS="$(detect_os)"
   ARCH="$(detect_arch)"
   BINARY_NAME="gyre-${ARCH}-${OS}"
-  DOWNLOAD_URL="${RELEASES_BASE}/${GYRE_VERSION}/${BINARY_NAME}"
+  if [ "$GYRE_VERSION" = "latest" ]; then
+  DOWNLOAD_URL="${RELEASES_BASE}/latest/download/${BINARY_NAME}"
+else
+  DOWNLOAD_URL="${RELEASES_BASE}/download/${GYRE_VERSION}/${BINARY_NAME}"
+fi
 
   info "Platform: ${ARCH}-${OS}"
   info "Version:  ${GYRE_VERSION}"
@@ -133,8 +137,8 @@ main() {
   ok "Gyre installed successfully."
   printf "\n"
   printf "  ${BOLD}Next steps:${RESET}\n"
-  printf "  ${CYAN}gyre init${RESET}   — set up your first agent\n"
-  printf "  ${CYAN}gyre serve${RESET}  — start your tribe\n"
+  printf "  ${CYAN}gyre setup${RESET}  — set up your first agent\n"
+  printf "  ${CYAN}gyre run${RESET}    — start your tribe\n"
   printf "  ${CYAN}gyre --help${RESET} — see all commands\n"
   printf "\n"
   printf "  ${DIM}Docs: https://getgyre.com/docs${RESET}\n"

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # Gyre installer
-# Usage: curl -fsSL https://getgyre.com/install | sh
+# Usage: curl -fsSL https://getgyre.com/install.sh | sh
 # More info: https://getgyre.com/install
 
 set -e

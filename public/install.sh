@@ -58,15 +58,15 @@ check_deps() {
   fi
 }
 
-# ─── Download binary ───────────────────────────────────────────────────────────
-download_binary() {
+# ─── Download file (returns 0 on success, 1 on 404/error) ─────────────────────
+try_download() {
   local url="$1"
   local dest="$2"
 
   if [ "$DOWNLOADER" = "curl" ]; then
-    curl -fsSL --progress-bar -L "$url" -o "$dest"
+    curl -fsSL --progress-bar -L "$url" -o "$dest" 2>/dev/null
   else
-    wget -q --show-progress "$url" -O "$dest"
+    wget -q --show-progress "$url" -O "$dest" 2>/dev/null
   fi
 }
 
@@ -81,36 +81,69 @@ main() {
 
   OS="$(detect_os)"
   ARCH="$(detect_arch)"
-  BINARY_NAME="gyre-${ARCH}-${OS}"
-  if [ "$GYRE_VERSION" = "latest" ]; then
-  DOWNLOAD_URL="${RELEASES_BASE}/latest/download/${BINARY_NAME}"
-else
-  DOWNLOAD_URL="${RELEASES_BASE}/download/${GYRE_VERSION}/${BINARY_NAME}"
-fi
+  TARGET="${ARCH}-${OS}"
 
-  info "Platform: ${ARCH}-${OS}"
+  # cargo-dist archives: unversioned (new) and versioned (legacy) names
+  # Try unversioned first: gyre-<target>.tar.gz (cargo-dist default, no version in filename)
+  # Fall back to versioned: gyre-<version>-<target>.tar.gz (older releases)
+  ARCHIVE_UNVERSIONED="gyre-${TARGET}.tar.gz"
+  if [ "$GYRE_VERSION" = "latest" ]; then
+    URL_UNVERSIONED="${RELEASES_BASE}/latest/download/${ARCHIVE_UNVERSIONED}"
+  else
+    ARCHIVE_VERSIONED="gyre-${GYRE_VERSION}-${TARGET}.tar.gz"
+    URL_VERSIONED="${RELEASES_BASE}/download/${GYRE_VERSION}/${ARCHIVE_VERSIONED}"
+    URL_UNVERSIONED="${RELEASES_BASE}/download/${GYRE_VERSION}/${ARCHIVE_UNVERSIONED}"
+  fi
+
+  info "Platform: ${TARGET}"
   info "Version:  ${GYRE_VERSION}"
-  info "Source:   ${DOWNLOAD_URL}"
+  info "Source:   ${URL_UNVERSIONED}"
 
   step "Downloading..."
 
-  # Create temp file
+  # Create temp directory
   TMP_DIR="$(mktemp -d)"
+  TMP_ARCHIVE="${TMP_DIR}/gyre.tar.gz"
   TMP_BIN="${TMP_DIR}/gyre"
   trap 'rm -rf "$TMP_DIR"' EXIT
 
-  # Download
-  if ! download_binary "$DOWNLOAD_URL" "$TMP_BIN"; then
-    warn "Binary not yet available at: ${DOWNLOAD_URL}"
+  # Try unversioned archive name first (cargo-dist / current releases)
+  DOWNLOAD_OK=0
+  if try_download "$URL_UNVERSIONED" "$TMP_ARCHIVE" && [ -s "$TMP_ARCHIVE" ]; then
+    DOWNLOAD_OK=1
+    info "Downloaded ${ARCHIVE_UNVERSIONED}"
+  elif [ "$GYRE_VERSION" != "latest" ]; then
+    # Fall back to versioned archive name (legacy releases)
+    info "Trying versioned archive name..."
+    if try_download "$URL_VERSIONED" "$TMP_ARCHIVE" && [ -s "$TMP_ARCHIVE" ]; then
+      DOWNLOAD_OK=1
+      info "Downloaded ${ARCHIVE_VERSIONED}"
+    fi
+  fi
+
+  if [ "$DOWNLOAD_OK" = "0" ]; then
+    warn "Archive not yet available for platform: ${TARGET}"
     warn "Gyre is in early access — releases will be available soon."
     warn "Star the repo and watch for release notifications:"
-    warn "  https://github.com/sac916/getgyre.com"
+    warn "  https://github.com/SargassoLLC/gyre"
     error "Download failed. Please try again when releases are live."
   fi
 
-  # Verify the file was downloaded and is non-empty
+  # Extract binary from the archive
+  if ! tar -xzf "$TMP_ARCHIVE" -C "$TMP_DIR" --strip-components=1 gyre 2>/dev/null; then
+    # Some archives may not have a subdirectory; try without strip
+    tar -xzf "$TMP_ARCHIVE" -C "$TMP_DIR" 2>/dev/null || true
+    # Find the extracted binary
+    FOUND_BIN="$(find "$TMP_DIR" -maxdepth 2 -name "gyre" -type f | head -1)"
+    if [ -z "$FOUND_BIN" ]; then
+      error "Could not find gyre binary inside the downloaded archive."
+    fi
+    cp "$FOUND_BIN" "$TMP_BIN"
+  fi
+
+  # Verify the binary is non-empty
   if [ ! -s "$TMP_BIN" ]; then
-    error "Downloaded file is empty. The release may not be available yet."
+    error "Extracted binary is empty. The release may be malformed."
   fi
 
   # Make executable
@@ -129,7 +162,7 @@ fi
   # Verify install
   if ! command -v gyre > /dev/null 2>&1; then
     warn "gyre was installed to ${INSTALL_DIR}/gyre but may not be in your PATH."
-    warn "Add ${INSTALL_DIR} to your PATH or run: ${INSTALL_DIR}/gyre init"
+    warn "Add ${INSTALL_DIR} to your PATH or run: ${INSTALL_DIR}/gyre setup"
   fi
 
   step "Done!"

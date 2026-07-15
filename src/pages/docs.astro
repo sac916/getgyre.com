@@ -2,19 +2,301 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Docs — Gyre" description="Gyre documentation: quickstart, architecture, CLI reference.">
+<BaseLayout title="Docs — Gyre" description="Gyre quickstart: zero to running agent in five minutes. Install, configure, and run your first persistent AI agent.">
   <nav style="position:sticky;top:0;z-index:100;background:rgba(8,13,26,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #0d1f2e;padding:0 2rem;">
     <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;">
-      <a href="/" style="font-family:Georgia,serif;font-size:1.25rem;font-weight:bold;color:#ffffff;">gyre</a>
-      <a href="/install" style="background:#007898;color:white;padding:0.4rem 1rem;border-radius:6px;font-size:0.875rem;font-weight:500;">Install</a>
+      <a href="/" style="font-family:Georgia,serif;font-size:1.25rem;font-weight:bold;color:#ffffff;letter-spacing:-0.02em;">gyre</a>
+      <div style="display:flex;gap:2rem;align-items:center;">
+        <a href="/docs" style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Docs</a>
+        <a href="/#pricing" style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Pricing</a>
+        <a href="/blog/building-ambient-ai-os-in-rust" style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Blog</a>
+        <a href="https://github.com/SargassoLLC/gyre" style="color:rgba(255,255,255,0.65);font-size:0.875rem;">GitHub</a>
+        <a href="/install" style="background:#007898;color:white;padding:0.4rem 1rem;border-radius:6px;font-size:0.875rem;font-weight:500;">Install</a>
+      </div>
     </div>
   </nav>
-  <main style="max-width:760px;margin:0 auto;padding:5rem 2rem 8rem;text-align:center;">
-    <h1 style="font-family:Georgia,serif;font-size:2.5rem;margin-bottom:1rem;">Docs</h1>
-    <p style="color:rgba(255,255,255,0.65);font-size:1.1rem;margin-bottom:3rem;">Documentation is coming soon. In the meantime, try <code style="font-family:monospace;color:#00aed0;">gyre --help</code> after installing.</p>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <a href="/install" style="background:#007898;color:white;padding:0.8rem 2rem;border-radius:8px;font-size:0.95rem;">Install Gyre</a>
-      <a href="/" style="border:1px solid #0d1f2e;color:rgba(255,255,255,0.65);padding:0.8rem 2rem;border-radius:8px;font-size:0.95rem;">Back to home</a>
+
+  <main style="max-width:760px;margin:0 auto;padding:5rem 2rem 8rem;">
+
+    <!-- Page header -->
+    <div style="margin-bottom:3rem;">
+      <div style="display:inline-block;background:rgba(0,120,160,0.1);border:1px solid rgba(0,120,160,0.22);border-radius:100px;padding:0.3rem 1rem;margin-bottom:1.5rem;font-size:0.8rem;color:#00aed0;letter-spacing:0.05em;text-transform:uppercase;">Quickstart</div>
+      <h1 style="font-family:Georgia,serif;font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem;letter-spacing:-0.02em;">Zero to running agent<br/>in five minutes.</h1>
+      <p style="color:rgba(255,255,255,0.65);font-size:1.1rem;line-height:1.7;">This guide gets you from nothing to a working Gyre agent that responds to messages. By the end you'll have Gyre running in your terminal with persistent memory.</p>
     </div>
+
+    <!-- What You Need -->
+    <section style="margin-bottom:3rem;">
+      <h2 style="font-family:Georgia,serif;font-size:1.5rem;margin-bottom:1.25rem;color:#ffffff;">What You Need</h2>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid #0d1f2e;">
+              <th style="padding:0.75rem 1.25rem;text-align:left;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.35);">Requirement</th>
+              <th style="padding:0.75rem 1.25rem;text-align:left;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.35);">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #0d1f2e;">
+              <td style="padding:0.875rem 1.25rem;color:#ffffff;font-size:0.9rem;font-weight:500;">macOS, Linux, or Windows WSL</td>
+              <td style="padding:0.875rem 1.25rem;color:rgba(255,255,255,0.65);font-size:0.9rem;">Native Windows: use the <code style="font-family:monospace;color:#00aed0;">.msi</code> installer instead</td>
+            </tr>
+            <tr>
+              <td style="padding:0.875rem 1.25rem;color:#ffffff;font-size:0.9rem;font-weight:500;">An LLM</td>
+              <td style="padding:0.875rem 1.25rem;color:rgba(255,255,255,0.65);font-size:0.9rem;"><a href="https://claude.ai/code" style="color:#00aed0;">Claude Code</a> (zero-config) <strong>or</strong> an API key for Anthropic / OpenAI / Ollama</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;margin-top:0.75rem;">No database setup required. Gyre uses an embedded libSQL database by default.</p>
+    </section>
+
+    <!-- Step 1 -->
+    <section style="margin-bottom:3rem;">
+      <div style="display:flex;align-items:center;gap:0.875rem;margin-bottom:1.25rem;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.3);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:0.9rem;color:#00aed0;flex-shrink:0;">1</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.5rem;color:#ffffff;">Install Gyre</h2>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.65);margin-bottom:1rem;font-size:0.95rem;"><strong style="color:rgba(255,255,255,0.85);">macOS / Linux / WSL:</strong></p>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#ffffff;margin:0;white-space:pre-wrap;word-break:break-all;">curl -fsSL https://getgyre.com/install | sh</pre>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.65);margin-bottom:1rem;font-size:0.95rem;"><strong style="color:rgba(255,255,255,0.85);">Windows (PowerShell):</strong></p>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#ffffff;margin:0;white-space:pre-wrap;word-break:break-all;">irm https://github.com/SargassoLLC/gyre/releases/latest/download/gyre-installer.ps1 | iex</pre>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.65);margin-bottom:1rem;font-size:0.95rem;"><strong style="color:rgba(255,255,255,0.85);">From source (Rust 1.85+):</strong></p>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#ffffff;margin:0;">git clone https://github.com/SargassoLLC/gyre.git &amp;&amp; cd gyre
+cargo build --release
+# Binary is at: target/release/gyre</pre>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.65);margin-bottom:0.75rem;font-size:0.95rem;"><strong style="color:rgba(255,255,255,0.85);">Verify:</strong></p>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#28c840;margin:0;">gyre --version</pre>
+      </div>
+    </section>
+
+    <!-- Step 2 -->
+    <section style="margin-bottom:3rem;">
+      <div style="display:flex;align-items:center;gap:0.875rem;margin-bottom:1.25rem;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.3);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:0.9rem;color:#00aed0;flex-shrink:0;">2</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.5rem;color:#ffffff;">Choose Your LLM</h2>
+      </div>
+
+      <div style="margin-bottom:1.5rem;">
+        <h3 style="font-size:1rem;color:#ffffff;margin-bottom:0.75rem;">Option A: Claude Code (zero-config, recommended)</h3>
+        <p style="color:rgba(255,255,255,0.65);font-size:0.95rem;margin-bottom:1rem;">If you have <a href="https://claude.ai/code" style="color:#00aed0;">Claude Code</a> installed, Gyre uses it automatically — no API key needed.</p>
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;overflow-x:auto;">
+          <pre style="font-family:monospace;font-size:0.85rem;color:#ffffff;margin:0;"><span style="color:rgba(255,255,255,0.45);"># Verify Claude Code is installed</span>
+claude --version</pre>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size:1rem;color:#ffffff;margin-bottom:0.75rem;">Option B: API key</h3>
+        <p style="color:rgba(255,255,255,0.65);font-size:0.95rem;margin-bottom:1rem;">Set the appropriate env var before running <code style="font-family:monospace;color:#00aed0;">gyre setup</code>:</p>
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;overflow-x:auto;">
+          <pre style="font-family:monospace;font-size:0.85rem;color:#ffffff;margin:0;"><span style="color:rgba(255,255,255,0.45);"># Anthropic</span>
+export ANTHROPIC_API_KEY=sk-ant-...
+
+<span style="color:rgba(255,255,255,0.45);"># OpenAI</span>
+export OPENAI_API_KEY=sk-...
+
+<span style="color:rgba(255,255,255,0.45);"># Ollama (local, no key needed)</span>
+export LLM_BACKEND=ollama
+export OLLAMA_MODEL=llama3.2   <span style="color:rgba(255,255,255,0.45);"># or any model you've pulled</span></pre>
+        </div>
+        <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;margin-top:0.75rem;">You can also set these in a <code style="font-family:monospace;">.env</code> file in your working directory.</p>
+      </div>
+    </section>
+
+    <!-- Step 3 -->
+    <section style="margin-bottom:3rem;">
+      <div style="display:flex;align-items:center;gap:0.875rem;margin-bottom:1.25rem;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.3);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:0.9rem;color:#00aed0;flex-shrink:0;">3</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.5rem;color:#ffffff;">Run the Setup Wizard</h2>
+      </div>
+
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#00aed0;margin:0;">gyre setup</pre>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.65);font-size:0.95rem;margin-bottom:1rem;">The wizard takes about 2 minutes and handles:</p>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.25rem;">
+        <li style="color:rgba(255,255,255,0.65);font-size:0.9rem;display:flex;gap:0.5rem;"><span style="color:#007898;">✓</span> LLM provider selection and auth</li>
+        <li style="color:rgba(255,255,255,0.65);font-size:0.9rem;display:flex;gap:0.5rem;"><span style="color:#007898;">✓</span> Agent identity (name, personality)</li>
+        <li style="color:rgba(255,255,255,0.65);font-size:0.9rem;display:flex;gap:0.5rem;"><span style="color:#007898;">✓</span> Database location</li>
+        <li style="color:rgba(255,255,255,0.65);font-size:0.9rem;display:flex;gap:0.5rem;"><span style="color:#007898;">✓</span> Optional channel connections (Telegram, Discord, Slack)</li>
+      </ul>
+      <p style="color:rgba(255,255,255,0.45);font-size:0.875rem;font-style:italic;">Skip everything you don't need — every setting has a sensible default. You can re-run <code style="font-family:monospace;color:#00aed0;">gyre setup</code> at any time to change settings.</p>
+    </section>
+
+    <!-- Step 4 -->
+    <section style="margin-bottom:3rem;">
+      <div style="display:flex;align-items:center;gap:0.875rem;margin-bottom:1.25rem;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.3);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:0.9rem;color:#00aed0;flex-shrink:0;">4</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.5rem;color:#ffffff;">Start the Agent</h2>
+      </div>
+
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#00aed0;margin:0;">gyre run</pre>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.65);font-size:0.95rem;margin-bottom:1rem;">You'll see the Gyre boot screen, then a <code style="font-family:monospace;color:#00aed0;">&gt;</code> prompt. Type anything to talk to your agent:</p>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#ffffff;margin:0;"><span style="color:#28c840;">&gt;</span> Hello! What can you help me with?</pre>
+      </div>
+      <p style="color:rgba(255,255,255,0.45);font-size:0.875rem;font-style:italic;">Tip: Type <code style="font-family:monospace;">/help</code> to see all available slash commands.</p>
+    </section>
+
+    <!-- Step 5 -->
+    <section style="margin-bottom:3rem;">
+      <div style="display:flex;align-items:center;gap:0.875rem;margin-bottom:1.25rem;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,120,160,0.15);border:1px solid rgba(0,120,160,0.3);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:0.9rem;color:#00aed0;flex-shrink:0;">5</div>
+        <h2 style="font-family:Georgia,serif;font-size:1.5rem;color:#ffffff;">Verify It's Working</h2>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.65);font-size:0.95rem;margin-bottom:1rem;">Run these quick checks:</p>
+      <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <pre style="font-family:monospace;font-size:0.85rem;color:#ffffff;margin:0;"><span style="color:rgba(255,255,255,0.45);"># 1. Check the agent responds</span>
+<span style="color:#28c840;">&gt;</span> What's today's date?
+
+<span style="color:rgba(255,255,255,0.45);"># 2. Check memory is persisting</span>
+<span style="color:#28c840;">&gt;</span> Remember that my name is [your name]
+
+<span style="color:rgba(255,255,255,0.45);"># (Start a new session)</span>
+gyre run
+
+<span style="color:#28c840;">&gt;</span> What's my name?
+<span style="color:rgba(255,255,255,0.45);"># The agent should remember.</span></pre>
+      </div>
+      <div style="background:rgba(0,120,160,0.07);border:1px solid rgba(0,120,160,0.2);border-radius:8px;padding:0.875rem 1.25rem;">
+        <p style="color:rgba(255,255,255,0.75);font-size:0.9rem;">If memory recall works, your agent is fully operational.</p>
+      </div>
+    </section>
+
+    <!-- What's Next -->
+    <section style="margin-bottom:3rem;">
+      <h2 style="font-family:Georgia,serif;font-size:1.75rem;margin-bottom:2rem;color:#ffffff;">What's Next</h2>
+
+      <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-family:Georgia,serif;font-size:1.1rem;margin-bottom:0.75rem;color:#ffffff;">Connect a Messaging Channel</h3>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:1rem;">Talk to Gyre from your phone or team workspace:</p>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;margin-bottom:1rem;font-family:monospace;font-size:0.85rem;color:#00aed0;">gyre setup channels</div>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;">Available channels:
+            <a href="https://github.com/SargassoLLC/gyre/blob/main/docs/TELEGRAM_SETUP.md" style="color:#00aed0;">Telegram</a> ·
+            <a href="https://github.com/SargassoLLC/gyre/blob/main/docs/DISCORD_SETUP.md" style="color:#00aed0;">Discord</a> ·
+            <a href="https://github.com/SargassoLLC/gyre/blob/main/docs/SLACK_SETUP.md" style="color:#00aed0;">Slack</a> ·
+            <a href="https://github.com/SargassoLLC/gyre/blob/main/docs/WHATSAPP_SETUP.md" style="color:#00aed0;">WhatsApp</a>
+          </p>
+        </div>
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-family:Georgia,serif;font-size:1.1rem;margin-bottom:0.75rem;color:#ffffff;">Give the Agent a Personality</h3>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:1rem;">Create <code style="font-family:monospace;color:#00aed0;">SOUL.md</code> in your agent's home directory (<code style="font-family:monospace;color:#00aed0;">~/.gyre/agents/&lt;name&gt;/</code>):</p>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;font-family:monospace;font-size:0.85rem;color:rgba(255,255,255,0.65);">
+            <div style="color:#00aed0;"># SOUL.md</div>
+            <div style="margin-top:0.5rem;">You are [name]. [Brief description of personality, tone, focus areas.]</div>
+          </div>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;margin-top:0.75rem;">Restart Gyre and the agent will adopt the new identity.</p>
+        </div>
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-family:Georgia,serif;font-size:1.1rem;margin-bottom:0.75rem;color:#ffffff;">Add Memory Context</h3>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:1rem;">Create <code style="font-family:monospace;color:#00aed0;">MEMORY.md</code> in the same directory to seed the agent with background knowledge:</p>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;font-family:monospace;font-size:0.85rem;color:rgba(255,255,255,0.65);">
+            <div style="color:#00aed0;"># MEMORY.md</div>
+            <div style="margin-top:0.5rem;">- My timezone is EST</div>
+            <div>- I work on [project]</div>
+            <div>- Prefer concise responses</div>
+          </div>
+        </div>
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-family:Georgia,serif;font-size:1.1rem;margin-bottom:0.75rem;color:#ffffff;">Docker Setup (persistent background service)</h3>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;margin-bottom:0.75rem;font-family:monospace;font-size:0.85rem;color:#ffffff;">
+            <div><span style="color:rgba(255,255,255,0.45);"># fill in API keys</span></div>
+            <div>cp deploy/env.example .env</div>
+            <div>docker-compose -f docker-compose.simple.yml up -d</div>
+          </div>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;">See <a href="https://github.com/SargassoLLC/gyre/blob/main/docs/DOCKER.md" style="color:#00aed0;">docs/DOCKER.md</a> for full container setup.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Troubleshooting -->
+    <section style="margin-bottom:3rem;">
+      <h2 style="font-family:Georgia,serif;font-size:1.75rem;margin-bottom:2rem;color:#ffffff;">Troubleshooting</h2>
+
+      <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-size:1rem;color:#ffffff;font-family:monospace;margin-bottom:0.75rem;">gyre: command not found</h3>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:0.75rem;">The installer adds Gyre to your PATH. Reload your shell:</p>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;font-family:monospace;font-size:0.85rem;color:#00aed0;">source ~/.bashrc   <span style="color:rgba(255,255,255,0.35);"># or ~/.zshrc on macOS</span></div>
+        </div>
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-size:1rem;color:#ffffff;font-family:monospace;margin-bottom:0.75rem;">Error: No LLM provider configured</h3>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:0.75rem;">Set an API key or install Claude Code:</p>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;font-family:monospace;font-size:0.85rem;color:#ffffff;">
+            <div>export ANTHROPIC_API_KEY=sk-ant-...</div>
+            <div>gyre run</div>
+          </div>
+        </div>
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-size:1rem;color:#ffffff;font-family:monospace;margin-bottom:0.75rem;">Error: Database locked</h3>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:0.75rem;">Another Gyre instance is running. Find and stop it:</p>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;font-family:monospace;font-size:0.85rem;color:#ffffff;">
+            <div>pkill -f "gyre run"</div>
+            <div>gyre run</div>
+          </div>
+        </div>
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-size:1rem;color:#ffffff;margin-bottom:0.75rem;">Agent doesn't remember things between sessions</h3>
+          <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:0.75rem;">Memory requires the database to be writable. Check:</p>
+          <div style="background:#040a12;border:1px solid #0d1f2e;border-radius:6px;padding:0.75rem 1rem;margin-bottom:0.75rem;font-family:monospace;font-size:0.85rem;color:#ffffff;">
+            <div><span style="color:rgba(255,255,255,0.45);"># gyre.db should exist and be readable/writable</span></div>
+            <div>ls -la ~/.gyre/</div>
+          </div>
+          <p style="color:rgba(255,255,255,0.45);font-size:0.85rem;">If running in Docker, make sure the volume is mounted: <code style="font-family:monospace;">~/.gyre:/root/.gyre</code></p>
+        </div>
+
+        <div style="background:#060c16;border:1px solid #0d1f2e;border-radius:10px;padding:1.5rem;">
+          <h3 style="font-size:1rem;color:#ffffff;margin-bottom:0.75rem;">LLM errors / timeouts</h3>
+          <ol style="list-style:decimal;padding-left:1.25rem;display:flex;flex-direction:column;gap:0.4rem;">
+            <li style="color:rgba(255,255,255,0.65);font-size:0.9rem;">Verify your API key is valid</li>
+            <li style="color:rgba(255,255,255,0.65);font-size:0.9rem;">Check your internet connection</li>
+            <li style="color:rgba(255,255,255,0.65);font-size:0.9rem;">For Ollama: confirm the model is downloaded (<code style="font-family:monospace;color:#00aed0;">ollama list</code>)</li>
+          </ol>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Still Stuck -->
+    <section>
+      <div style="background:rgba(0,120,160,0.07);border:1px solid rgba(0,120,160,0.18);border-radius:12px;padding:2rem;text-align:center;">
+        <h2 style="font-family:Georgia,serif;font-size:1.4rem;margin-bottom:1rem;color:#ffffff;">Still stuck?</h2>
+        <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
+          <a href="https://github.com/SargassoLLC/gyre/wiki" style="color:#00aed0;font-size:0.9rem;">Full Documentation</a>
+          <span style="color:#0d1f2e;">|</span>
+          <a href="https://discord.gg/gyre" style="color:#00aed0;font-size:0.9rem;">Community Discord</a>
+          <span style="color:#0d1f2e;">|</span>
+          <a href="https://github.com/SargassoLLC/gyre/issues" style="color:#00aed0;font-size:0.9rem;">File an Issue</a>
+        </div>
+      </div>
+    </section>
+
   </main>
 </BaseLayout>

@@ -83,17 +83,24 @@ main() {
   ARCH="$(detect_arch)"
   TARGET="${ARCH}-${OS}"
 
+  # Resolve "latest" to a concrete tag via the API: GitHub's
+  # /releases/latest endpoint excludes pre-releases, and betas are
+  # published as pre-releases. Newest release of any kind wins.
+  if [ "$GYRE_VERSION" = "latest" ]; then
+    GYRE_VERSION="$(curl -fsSL "https://api.github.com/repos/SargassoLLC/gyre/releases?per_page=1" 2>/dev/null \
+      | grep -m1 '"tag_name"' | cut -d'"' -f4)"
+    if [ -z "$GYRE_VERSION" ]; then
+      error "Could not resolve the latest release. Set GYRE_VERSION explicitly."
+    fi
+  fi
+
   # cargo-dist archives: unversioned (new) and versioned (legacy) names
   # Try unversioned first: gyre-<target>.tar.gz (cargo-dist default, no version in filename)
   # Fall back to versioned: gyre-<version>-<target>.tar.gz (older releases)
   ARCHIVE_UNVERSIONED="gyre-${TARGET}.tar.gz"
-  if [ "$GYRE_VERSION" = "latest" ]; then
-    URL_UNVERSIONED="${RELEASES_BASE}/latest/download/${ARCHIVE_UNVERSIONED}"
-  else
-    ARCHIVE_VERSIONED="gyre-${GYRE_VERSION}-${TARGET}.tar.gz"
-    URL_VERSIONED="${RELEASES_BASE}/download/${GYRE_VERSION}/${ARCHIVE_VERSIONED}"
-    URL_UNVERSIONED="${RELEASES_BASE}/download/${GYRE_VERSION}/${ARCHIVE_UNVERSIONED}"
-  fi
+  ARCHIVE_VERSIONED="gyre-${GYRE_VERSION}-${TARGET}.tar.gz"
+  URL_VERSIONED="${RELEASES_BASE}/download/${GYRE_VERSION}/${ARCHIVE_VERSIONED}"
+  URL_UNVERSIONED="${RELEASES_BASE}/download/${GYRE_VERSION}/${ARCHIVE_UNVERSIONED}"
 
   info "Platform: ${TARGET}"
   info "Version:  ${GYRE_VERSION}"
@@ -112,7 +119,7 @@ main() {
   if try_download "$URL_UNVERSIONED" "$TMP_ARCHIVE" && [ -s "$TMP_ARCHIVE" ]; then
     DOWNLOAD_OK=1
     info "Downloaded ${ARCHIVE_UNVERSIONED}"
-  elif [ "$GYRE_VERSION" != "latest" ]; then
+  else
     # Fall back to versioned archive name (legacy releases)
     info "Trying versioned archive name..."
     if try_download "$URL_VERSIONED" "$TMP_ARCHIVE" && [ -s "$TMP_ARCHIVE" ]; then
